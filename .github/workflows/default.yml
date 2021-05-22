@@ -20,5 +20,5 @@ jobs:
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
     - name: push android-ndk:${{ matrix.ndk-version }}
       run: |
-        docker tag ${IMAGE_NAME} ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${{ matrix.ndk-version }}
+        docker tag ${IMAGE_NAME}:${{ matrix.cmake-version }} ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${{ matrix.ndk-version }}
         docker push ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${{ matrix.ndk-version }}
