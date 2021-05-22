@@ -1,0 +1,22 @@
+name: build and deploy
+
+on: [push, pull_request]
+
+env:
+  IMAGE_NAME: android-ndk
+
+jobs:
+  build-and-deploy:
+    strategy:
+      matrix:
+        ndk-version: [r22b]
+    runs-on: ubuntu-latest
+    steps:
+    - name: build android-ndk:${{ matrix.ndk-version }}
+    - uses: actions/checkout@v2
+      run: |
+        docker build . -t ${IMAGE_NAME}:${{ matrix.ndk-version }} --build-arg NDK_VERSION=${{ matrix.ndk-version }}
+    - name: push android-ndk:${{ matrix.ndk-version }}
+      run: |
+        docker tag ${IMAGE_NAME} ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${{ matrix.ndk-version }}
+        docker push ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${{ matrix.ndk-version }}
