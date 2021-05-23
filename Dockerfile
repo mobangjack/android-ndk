@@ -9,6 +9,6 @@ RUN wget -q -nv https://dl.google.com/android/repository/android-ndk-${NDK_VERSI
 RUN unzip -qq android-ndk-${NDK_VERSION}-linux-x86_64.zip
 RUN rm android-ndk-${NDK_VERSION}-linux-x86_64.zip
 ENV NDK_VERSION=${NDK_VERSION}
-ENV ANDROID_NDK=/android-ndk-${NDK_VERSION}
-RUN echo "export ANDROID_NDK=${ANDROID_NDK}" >> /etc/bash.bashrc
-RUN ln -s ${ANDROID_NDK} /android-ndk
+RUN mv /android-ndk-${NDK_VERSION} /android-ndk
+ENV ANDROID_NDK=/android-ndk
+RUN echo "export ANDROID_NDK=${ANDROID_NDK}" >> /etc/profile
