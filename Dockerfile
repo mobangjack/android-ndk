@@ -11,3 +11,4 @@ ENV NDK_VERSION=${NDK_VERSION}
 ENV ANDROID_NDK=/android-ndk-${NDK_VERSION}
 RUN echo "export ANDROID_NDK=${ANDROID_NDK}" >> /etc/bash.bashrc
 RUN rm android-ndk-${NDK_VERSION}-linux-x86_64.zip
+RUN ln -s ${ANDROID_NDK} /android-ndk
