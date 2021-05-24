@@ -4,6 +4,7 @@ on: [push, pull_request]
 
 env:
   IMAGE_NAME: android-ndk
+  LATEST_VERSION: r22b
 
 jobs:
   build-and-deploy:
@@ -22,3 +23,7 @@ jobs:
       run: |
         docker tag ${IMAGE_NAME}:${{ matrix.ndk-version }} ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${{ matrix.ndk-version }}
         docker push ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${{ matrix.ndk-version }}
+        if [ "${{ matrix.ndk-version }}" == "${LATEST_VERSION}" ]; then
+          docker tag ${IMAGE_NAME}:${{ matrix.ndk-version }} ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:latest
+        fi
