@@ -10,20 +10,20 @@ jobs:
   build-and-deploy:
     strategy:
       matrix:
-        ndk-version: [r22b]
+        version: [r22b]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: build android-ndk:${{ matrix.ndk-version }}
+    - name: build android-ndk:${{ matrix.version }}
       run: |
-        docker build . -t ${IMAGE_NAME}:${{ matrix.ndk-version }} --build-arg NDK_VERSION=${{ matrix.ndk-version }}
+        docker build . -t ${IMAGE_NAME}:${{ matrix.version }} --build-arg NDK_VERSION=${{ matrix.version }}
     - name: docker login
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-    - name: push android-ndk:${{ matrix.ndk-version }}
+    - name: push android-ndk:${{ matrix.version }}
       run: |
-        docker tag ${IMAGE_NAME}:${{ matrix.ndk-version }} ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${{ matrix.ndk-version }}
-        docker push ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${{ matrix.ndk-version }}
-        if [ "${{ matrix.ndk-version }}" == "${LATEST_VERSION}" ]; then
-          docker tag ${IMAGE_NAME}:${{ matrix.ndk-version }} ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:latest
+        docker tag ${IMAGE_NAME}:${{ matrix.version }} ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${{ matrix.version }}
+        docker push ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:${{ matrix.version }}
+        if [ "${{ matrix.version }}" == "${LATEST_VERSION}" ]; then
+          docker tag ${IMAGE_NAME}:${{ matrix.version }} ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/${IMAGE_NAME}:latest
         fi
